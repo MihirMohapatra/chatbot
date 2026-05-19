@@ -1,5 +1,8 @@
 # Rust Chatbot
-
+<p align="center">
+  <img src="https://img.shields.io/badge/Rust-1.80+-000000?style=for-the-badge&logo=rust&logoColor=white" alt="Rust">
+  <img src="https://img.shields.io/badge/Web-Axum%20%2B%20Tokio-46E0B6?style=for-the-badge" alt="Web Framework">
+</p>
 A terminal chatbot in Rust supporting **Claude**, **OpenAI**, and **Ollama** (local models).
 
 ## Setup
