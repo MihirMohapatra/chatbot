@@ -20,6 +20,21 @@ A terminal chatbot in Rust supporting **Claude**, **OpenAI**, and **Ollama** (lo
    cargo run
    ```
 
+## Docker
+
+```bash
+# Build the image
+docker build -t chatbot .
+
+# Run with your .env file
+docker run -it --rm -v .env:/data/.env chatbot
+```
+
+For **Ollama** (local), use host networking:
+```bash
+docker run -it --rm --network host -v .env:/data/.env chatbot
+```
+
 ---
 
 ## Provider setup
