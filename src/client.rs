@@ -71,6 +71,7 @@ struct ApiError {
 
 // ── Main client ────────────────────────────────────────────────────────────────
 
+#[derive(Clone)]
 pub struct ChatClient {
     http: Client,
     config: Config,

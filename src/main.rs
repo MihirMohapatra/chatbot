@@ -1,6 +1,7 @@
 mod client;
 mod config;
 mod conversation;
+mod web;
 
 use anyhow::Result;
 use rustyline::{DefaultEditor, error::ReadlineError};
@@ -11,10 +12,27 @@ use conversation::Conversation;
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    let args: Vec<String> = std::env::args().collect();
+    let mode = args.get(1).map(|s| s.as_str()).unwrap_or("cli");
+
     let config = Config::load()?;
+
+    match mode {
+        "web" | "ui" | "serve" => {
+            let client = ChatClient::new(config)?;
+            let port: u16 = std::env::var("PORT")
+                .unwrap_or_else(|_| "8080".to_string())
+                .parse()
+                .unwrap_or(8080);
+            web::start(client, port).await
+        }
+        _ => run_cli(config).await,
+    }
+}
+
+async fn run_cli(config: Config) -> Result<()> {
     let provider_label = config.provider.label().to_string();
     let model = config.model.clone();
-
     let client = ChatClient::new(config)?;
     let mut conv = Conversation::new();
 
