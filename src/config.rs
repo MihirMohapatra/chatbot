@@ -28,6 +28,7 @@ impl Provider {
     }
 }
 
+#[derive(Clone)]
 pub struct Config {
     pub provider: Provider,
     pub api_key: String,

@@ -19,8 +19,21 @@ A terminal chatbot in Rust supporting **Claude**, **OpenAI**, and **Ollama** (lo
    ```
 
 3. **Run:**
+
+   **CLI mode (default):**
    ```bash
    cargo run
+   ```
+
+   **Web UI mode:**
+   ```bash
+   cargo run -- web
+   # Open http://localhost:8080
+   ```
+
+   Custom port:
+   ```bash
+   PORT=3000 cargo run -- web
    ```
 
 ## Docker
