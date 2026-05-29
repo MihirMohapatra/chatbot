@@ -4,7 +4,7 @@ mod conversation;
 mod web;
 
 use anyhow::Result;
-use rustyline::{DefaultEditor, error::ReadlineError};
+use rustyline::{error::ReadlineError, DefaultEditor};
 
 use client::ChatClient;
 use config::Config;
@@ -13,20 +13,21 @@ use conversation::Conversation;
 #[tokio::main]
 async fn main() -> Result<()> {
     let args: Vec<String> = std::env::args().collect();
-    let mode = args.get(1).map(|s| s.as_str()).unwrap_or("cli");
-
-    let config = Config::load()?;
+    let mode = args.get(1).map(|s| s.as_str()).unwrap_or("web");
 
     match mode {
         "web" | "ui" | "serve" => {
-            let client = ChatClient::new(config)?;
             let port: u16 = std::env::var("PORT")
                 .unwrap_or_else(|_| "8080".to_string())
                 .parse()
                 .unwrap_or(8080);
-            web::start(client, port).await
+            web::open_browser(port);
+            web::start(port).await
         }
-        _ => run_cli(config).await,
+        _ => {
+            let config = Config::load()?;
+            run_cli(config).await
+        }
     }
 }
 
@@ -36,13 +37,10 @@ async fn run_cli(config: Config) -> Result<()> {
     let client = ChatClient::new(config)?;
     let mut conv = Conversation::new();
 
-    println!("╭──────────────────────────────────────────╮");
-    println!("│  Rust Chatbot                            │");
-    println!("│  Provider : {:<30}│", provider_label);
-    println!("│  Model    : {:<30}│", model);
-    println!("│  Type 'quit' or Ctrl-C to exit           │");
-    println!("╰──────────────────────────────────────────╯");
-    println!();
+    println!("Rust Chatbot");
+    println!("Provider: {}", provider_label);
+    println!("Model: {}", model);
+    println!("Type 'quit' or Ctrl-C to exit\n");
 
     let mut rl = DefaultEditor::new()?;
 

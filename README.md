@@ -20,12 +20,18 @@ A terminal chatbot in Rust supporting **Claude**, **OpenAI**, and **Ollama** (lo
 
 3. **Run:**
 
-   **CLI mode (default):**
+   **Web UI mode (default):**
    ```bash
    cargo run
+   # Opens http://localhost:8080 with provider connect options
    ```
 
-   **Web UI mode:**
+   **CLI mode:**
+   ```bash
+   cargo run -- cli
+   ```
+
+   **Web UI mode (explicit):**
    ```bash
    cargo run -- web
    # Open http://localhost:8080
@@ -95,8 +101,8 @@ MODEL=anthropic/claude-sonnet-4
 | Variable | Default | Description |
 |---|---|---|
 | `PROVIDER` | `claude` | `claude`, `openai`, or `ollama` |
-| `ANTHROPIC_API_KEY` | — | Required for Claude |
-| `OPENAI_API_KEY` | — | Required for OpenAI |
+| `ANTHROPIC_API_KEY` | - | Required for Claude |
+| `OPENAI_API_KEY` | - | Required for OpenAI |
 | `MODEL` | provider default | Override the model name |
 | `BASE_URL` | provider default | Override the API endpoint |
 | `MAX_TOKENS` | `1024` | Max response length |
@@ -106,10 +112,11 @@ MODEL=anthropic/claude-sonnet-4
 
 ## Project structure
 
-```
+```text
 src/
-├── main.rs          # REPL loop
-├── client.rs        # Multi-provider HTTP client
-├── conversation.rs  # Message history
-└── config.rs        # Config + Provider enum
+|-- main.rs          # startup + CLI entry
+|-- client.rs        # multi-provider HTTP client
+|-- conversation.rs  # message history
+|-- config.rs        # config + provider enum
+|-- web.rs           # web UI + connect flow
 ```

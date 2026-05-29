@@ -90,4 +90,28 @@ impl Config {
             base_url,
         })
     }
+
+    pub fn from_runtime(
+        provider: Provider,
+        api_key: String,
+        model: String,
+        max_tokens: u32,
+        system_prompt: String,
+        base_url: Option<String>,
+    ) -> Self {
+        let default_url = match provider {
+            Provider::Claude => "https://api.anthropic.com",
+            Provider::OpenAI => "https://api.openai.com",
+            Provider::Ollama => "http://localhost:11434",
+        };
+
+        Config {
+            provider,
+            api_key,
+            model,
+            max_tokens,
+            system_prompt,
+            base_url: base_url.unwrap_or_else(|| default_url.to_string()),
+        }
+    }
 }
