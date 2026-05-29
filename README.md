@@ -34,6 +34,22 @@
 - Reliability: compile-time guarantees prevent many production runtime bugs
 - Maintainability: explicit types + explicit errors improve long-term operability
 
+## Performance Metrics: Rust vs Python (Backend Perspective)
+
+For backend workloads similar to this project (HTTP + JSON + concurrency), Rust usually performs better than Python on these metrics:
+
+| Metric | Rust (typical trend) | Python (typical trend) | Why it matters |
+|---|---|---|---|
+| Throughput (req/sec) | Higher | Lower | Handles more concurrent users per instance |
+| P95/P99 latency | Lower under load | Higher under load | More stable response times |
+| Memory per worker | Lower | Higher | Better infra efficiency and cost |
+| CPU efficiency | Higher | Lower | Better scaling for busy endpoints |
+
+Notes:
+- This is a general systems trend and can vary by framework, hardware, and workload.
+- For LLM apps, model/API network time can dominate total latency, but Rust still improves server efficiency and concurrency behavior.
+- If needed, we can add project-specific benchmark results in a future PR (same scenario, Rust vs Python implementation).
+
 ## Core Features
 
 - Web UI launch by default for executable users
