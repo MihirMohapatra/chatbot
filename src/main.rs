@@ -4,7 +4,7 @@ mod conversation;
 mod web;
 
 use anyhow::Result;
-use rustyline::{DefaultEditor, error::ReadlineError};
+use rustyline::{error::ReadlineError, DefaultEditor};
 
 use client::ChatClient;
 use config::Config;
@@ -37,13 +37,10 @@ async fn run_cli(config: Config) -> Result<()> {
     let client = ChatClient::new(config)?;
     let mut conv = Conversation::new();
 
-    println!("╭──────────────────────────────────────────╮");
-    println!("│  Rust Chatbot                            │");
-    println!("│  Provider : {:<30}│", provider_label);
-    println!("│  Model    : {:<30}│", model);
-    println!("│  Type 'quit' or Ctrl-C to exit           │");
-    println!("╰──────────────────────────────────────────╯");
-    println!();
+    println!("Rust Chatbot");
+    println!("Provider: {}", provider_label);
+    println!("Model: {}", model);
+    println!("Type 'quit' or Ctrl-C to exit\n");
 
     let mut rl = DefaultEditor::new()?;
 
