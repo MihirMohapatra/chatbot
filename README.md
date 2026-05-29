@@ -1,84 +1,100 @@
 # Rust Chatbot
+
 <p align="center">
   <img src="https://img.shields.io/badge/Rust-1.80+-000000?style=for-the-badge&logo=rust&logoColor=white" alt="Rust">
-  <img src="https://img.shields.io/badge/Web-Axum%20%2B%20Tokio-46E0B6?style=for-the-badge" alt="Web Framework">
+  <img src="https://img.shields.io/badge/Backend-Axum%20%2B%20Tokio-0F766E?style=for-the-badge" alt="Backend Stack">
+  <img src="https://img.shields.io/badge/AI%20Providers-Claude%20%7C%20OpenAI%20%7C%20Ollama-1D4ED8?style=for-the-badge" alt="Providers">
 </p>
-A terminal chatbot in Rust supporting **Claude**, **OpenAI**, and **Ollama** (local models).
 
-## Setup
+<p align="center">
+  Production-oriented Rust backend project for multi-provider AI chat.
+</p>
 
-1. **Install Rust:**
-   ```bash
-   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-   ```
+## Backend Recruiter Snapshot
 
-2. **Configure your provider:**
-   ```bash
-   cp .env.example .env
-   # Edit .env to set your PROVIDER and API key
-   ```
+- Built with `Rust + Tokio + Axum` for async backend performance
+- Multi-provider client abstraction (`Claude`, `OpenAI`, `Ollama`)
+- Provider-aware request handling with shared conversation state
+- Runtime connection flow and environment-based configuration
+- Docker-ready execution path
 
-3. **Run:**
+## Why This Is A Strong Backend Project
 
-   **Web UI mode (default):**
-   ```bash
-   cargo run
-   # Opens http://localhost:8080 with provider connect options
-   ```
+- Demonstrates service design, not just UI scripting
+- Uses explicit module boundaries for maintainability
+- Implements provider-specific HTTP contracts cleanly
+- Handles error propagation with typed context (`anyhow`)
+- Uses async I/O model suited for scalable API workloads
 
-   **CLI mode:**
-   ```bash
-   cargo run -- cli
-   ```
+## Why Rust For Backend Systems
 
-   **Web UI mode (explicit):**
-   ```bash
-   cargo run -- web
-   # Open http://localhost:8080
-   ```
+- Performance: predictable low-latency execution with minimal overhead
+- Safety: memory safety and thread safety without garbage collection pauses
+- Concurrency: strong async model and ownership rules reduce race-condition risk
+- Reliability: compile-time guarantees prevent many production runtime bugs
+- Maintainability: explicit types + explicit errors improve long-term operability
 
-   Custom port:
-   ```bash
-   PORT=3000 cargo run -- web
-   ```
+## Core Features
 
-## Docker
+- Web UI launch by default for executable users
+- CLI mode for terminal workflows
+- Connect-first provider selection (model, URL, prompt, key)
+- Unified chat API flow across providers
+- Local-model support via Ollama
 
+## Quick Start
+
+### 1. Install Rust
 ```bash
-# Build the image
-docker build -t chatbot .
-
-# Run with your .env file
-docker run -it --rm -v .env:/data/.env chatbot
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-For **Ollama** (local), use host networking:
+### 2. Clone and configure
 ```bash
-docker run -it --rm --network host -v .env:/data/.env chatbot
+git clone https://github.com/MihirMohapatra/chatbot.git
+cd chatbot/chatbot
+cp .env.example .env
 ```
 
----
+### 3. Run
 
-## Provider setup
+Default (Web UI):
+```bash
+cargo run
+# opens http://localhost:8080
+```
+
+CLI mode:
+```bash
+cargo run -- cli
+```
+
+Explicit web mode:
+```bash
+cargo run -- web
+```
+
+Custom port:
+```bash
+PORT=3000 cargo run -- web
+```
+
+## Provider Setup
 
 ### Claude (Anthropic)
 ```env
 PROVIDER=claude
 ANTHROPIC_API_KEY=sk-ant-...
 ```
-Get a key at https://console.anthropic.com
 
 ### OpenAI
 ```env
 PROVIDER=openai
 OPENAI_API_KEY=sk-...
 ```
-Get a key at https://platform.openai.com
 
-### Ollama (free, local, no key needed)
+### Ollama (local)
 ```bash
-# 1. Install Ollama: https://ollama.com
-# 2. Pull a model:
 ollama pull llama3.2
 ```
 ```env
@@ -86,7 +102,7 @@ PROVIDER=ollama
 MODEL=llama3.2
 ```
 
-### OpenRouter (access Claude/GPT/Gemini with one key)
+### OpenRouter (optional)
 ```env
 PROVIDER=openai
 OPENAI_API_KEY=sk-or-...
@@ -94,29 +110,55 @@ BASE_URL=https://openrouter.ai/api
 MODEL=anthropic/claude-sonnet-4
 ```
 
----
-
-## All .env options
+## Environment Variables
 
 | Variable | Default | Description |
 |---|---|---|
-| `PROVIDER` | `claude` | `claude`, `openai`, or `ollama` |
+| `PROVIDER` | `claude` | `claude`, `openai`, `ollama` |
 | `ANTHROPIC_API_KEY` | - | Required for Claude |
 | `OPENAI_API_KEY` | - | Required for OpenAI |
-| `MODEL` | provider default | Override the model name |
-| `BASE_URL` | provider default | Override the API endpoint |
-| `MAX_TOKENS` | `1024` | Max response length |
-| `SYSTEM_PROMPT` | built-in | Custom system prompt |
+| `MODEL` | provider default | Model override |
+| `BASE_URL` | provider default | Endpoint override |
+| `MAX_TOKENS` | `1024` | Response token cap |
+| `SYSTEM_PROMPT` | built-in | Assistant behavior prompt |
 
----
-
-## Project structure
+## Backend Architecture
 
 ```text
 src/
-|-- main.rs          # startup + CLI entry
-|-- client.rs        # multi-provider HTTP client
-|-- conversation.rs  # message history
-|-- config.rs        # config + provider enum
-|-- web.rs           # web UI + connect flow
+|-- main.rs          # startup routing + CLI loop
+|-- config.rs        # provider enum + env/runtime config
+|-- client.rs        # provider-specific HTTP clients
+|-- conversation.rs  # in-memory chat state model
+|-- web.rs           # axum routes, connect flow, chat API
 ```
+
+## Design Notes
+
+- `client.rs` separates Anthropic native API from OpenAI-compatible APIs
+- `config.rs` supports both static env config and runtime provider config
+- `web.rs` maintains per-session conversation state and connection context
+- CLI and Web modes share core request pipeline
+
+## Docker
+
+```bash
+docker build -t chatbot .
+docker run -it --rm -v .env:/data/.env chatbot
+```
+
+For Ollama host networking:
+```bash
+docker run -it --rm --network host -v .env:/data/.env chatbot
+```
+
+## Roadmap
+
+- Streamed responses (token-by-token)
+- Persistent chat history (SQLite/Postgres)
+- Metrics + tracing (`tracing`, OpenTelemetry)
+- Integration tests for provider adapters
+
+## License
+
+MIT
