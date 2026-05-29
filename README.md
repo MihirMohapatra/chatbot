@@ -67,19 +67,26 @@ flowchart LR
 
 ## Quick Start
 
-### 1. Install Rust
+### Option A: Run prebuilt executable (Rust not required)
+```powershell
+.\target\release\chatbot.exe
+```
+
+### Option B: Build/run from source (Rust required)
+
+#### 1. Install Rust
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-### 2. Clone and configure
+#### 2. Clone and configure
 ```bash
 git clone https://github.com/MihirMohapatra/chatbot.git
 cd chatbot/chatbot
 cp .env.example .env
 ```
 
-### 3. Run
+#### 3. Run
 
 Default (Web UI):
 ```bash
