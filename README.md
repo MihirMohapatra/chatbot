@@ -10,7 +10,7 @@
   Production-oriented Rust backend project for multi-provider AI chat.
 </p>
 
-## Backend Recruiter Snapshot
+## Backend Snapshot
 
 - Built with `Rust + Tokio + Axum` for async backend performance
 - Multi-provider client abstraction (`Claude`, `OpenAI`, `Ollama`)
