@@ -68,9 +68,16 @@ flowchart LR
 ## Quick Start
 
 ### Option A: Run prebuilt executable (Rust not required)
+
+Direct download:
+- [chatbot.exe (v1.0.1)](https://github.com/MihirMohapatra/chatbot/releases/download/v1.0.1/chatbot.exe)
+
+Run on Windows:
 ```powershell
-.\target\release\chatbot.exe
+.\chatbot.exe
 ```
+
+The app opens Web UI at `http://localhost:8080`.
 
 ### Option B: Build/run from source (Rust required)
 
