@@ -42,6 +42,29 @@
 - Unified chat API flow across providers
 - Local-model support via Ollama
 
+## UI Preview
+
+![Rust Chatbot UI](assets/capture-rust-chatbot.png)
+
+## Architecture Flow
+
+```mermaid
+flowchart LR
+    U["User (Browser or CLI)"] --> W["Axum Server (web.rs)"]
+    W --> C["Conversation State (Mutex + Arc)"]
+    W --> CFG["Runtime Config (config.rs)"]
+    CFG --> CL["ChatClient (client.rs)"]
+    C --> CL
+    CL --> P{"Provider"}
+    P --> A["Claude API"]
+    P --> O["OpenAI API"]
+    P --> L["Ollama Local API"]
+    A --> W
+    O --> W
+    L --> W
+    W --> U
+```
+
 ## Quick Start
 
 ### 1. Install Rust
