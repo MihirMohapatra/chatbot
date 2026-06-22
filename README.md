@@ -16,7 +16,7 @@
 - Multi-provider client abstraction (`Claude`, `OpenAI`, `Ollama`)
 - Provider-aware request handling with shared conversation state
 - Runtime connection flow and environment-based configuration
-- Docker-ready execution path
+- Docker-ready execution path available 
 
 ## Why This Is A Strong Backend Project
 
